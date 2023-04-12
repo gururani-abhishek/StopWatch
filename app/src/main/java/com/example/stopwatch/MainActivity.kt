@@ -20,11 +20,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        
         // get ref to stopwatch
         stopwatch = findViewById(R.id.stopwatch)
         tvStopwatchNickname = findViewById(R.id.tv_stopwatch_nickname)
         if(savedInstanceState != null) {
+
             tvStopwatchNickname.text = savedInstanceState.getString(NICKNAME_KEY)
             // the activity is being re-instantiated, and there must be a saved bundle
             offset = savedInstanceState.getLong(OFFSET_KEY)
@@ -89,6 +90,21 @@ class MainActivity : AppCompatActivity() {
         savedInstanceState.putLong(OFFSET_KEY, offset)
         savedInstanceState.putLong(BASE_KEY, stopwatch.base)
         super.onSaveInstanceState(savedInstanceState)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // stopwatch should pause
+        offset = SystemClock.elapsedRealtime() - stopwatch.base
+        stopwatch.stop()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        // stopwatch should start from where it was paused
+        stopwatch.base = SystemClock.elapsedRealtime() - offset
+        offset = 0
+        stopwatch.start()
     }
 
     private fun setBaseTime() {
