@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Chronometer
+        android:id="@+id/stopwatch"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:gravity="center_horizontal"
+        android:textSize="52sp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:layout_width="wrap_content"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/pairButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stopwatch"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/startBTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="@string/start"/>
+
+        <Button
+            android:id="@+id/stopBTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="@string/stop"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <Button
+        android:id="@+id/pauseBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/pairButtons"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_margin="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="@string/pause"
+        />
+
+    <Button
+        android:id="@+id/resetBTN"
+        android:layout_width="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/pauseBTN"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="@string/RESET"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
