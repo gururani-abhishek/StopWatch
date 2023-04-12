@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,16 +7,55 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Chronometer
-        android:id="@+id/stopwatch"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ll_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <EditText
+            android:id="@+id/et_nickname"
+            android:hint="@string/hint_et_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <Button
+            android:id="@+id/bt_generate_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_generate_nickname_text"/>
+
+        <TextView
+            android:id="@+id/tv_stopwatch_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/et_nickname"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_text"
+        app:layout_constraintRight_toRightOf="parent">
+    <Chronometer
+        android:id="@+id/stopwatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:textSize="52sp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
-        android:layout_width="wrap_content"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/pairButtons"
@@ -38,30 +78,30 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:text="@string/stop"/>
-
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <Button
-        android:id="@+id/pauseBTN"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/pairButtons1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/pairButtons"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_margin="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:text="@string/pause"
-        />
-
-    <Button
-        android:id="@+id/resetBTN"
-        android:layout_width="wrap_content"
-        android:layout_margin="20dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/pauseBTN"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:text="@string/RESET"
-        />
+        app:layout_constraintTop_toBottomOf="@id/pairButtons">
 
+        <Button
+            android:id="@+id/pauseBTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="@string/pause" />
 
+        <Button
+            android:id="@+id/resetBTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="@string/RESET" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

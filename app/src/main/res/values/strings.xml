@@ -4,4 +4,6 @@
     <string name="pause">PAUSE</string>
     <string name="RESET">reset</string>
     <string name="stop">stop</string>
+    <string name="hint_et_nickname">What would you call your beloved stopwatch?</string>
+    <string name="btn_generate_nickname_text">generate nickname</string>
 </resources>
