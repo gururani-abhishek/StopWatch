@@ -4,6 +4,11 @@ buildscript {
     ext {
         nav_version = "2.5.3"
     }
+
+    dependencies {
+        // safe args lib
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version")
+    }
 }
 plugins {
     id 'com.android.application' version '7.4.1' apply false

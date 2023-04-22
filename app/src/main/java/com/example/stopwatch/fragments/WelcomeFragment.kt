@@ -5,16 +5,39 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.stopwatch.R
+import com.example.stopwatch.databinding.FragmentWelcomeBinding
 
 class WelcomeFragment : Fragment() {
-
+    private var _binding : FragmentWelcomeBinding ?= null
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_welcome, container, false)
+        _binding = FragmentWelcomeBinding.inflate(inflater, container, false)
+
+        binding.btnStopwatch.setOnClickListener {
+            val stopwatchNickname = getStopwatchNickname()
+            val action = WelcomeFragmentDirections.actionWelcomeFragmentToStopwatchFragment(stopwatchNickname)
+            val navController = findNavController()
+            navController.navigate(action)
+        }
+        return binding.root
     }
 
+    private fun getStopwatchNickname() : String {
+        val etNickname = binding.etNickname.text
+        if(etNickname.isNullOrEmpty()) {
+            Toast.makeText(activity, "give your stopwatch a nickname", Toast.LENGTH_SHORT).show()
+        }
+        return etNickname.toString()
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
