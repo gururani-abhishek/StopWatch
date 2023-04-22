@@ -1,9 +1,10 @@
-package com.example.stopwatch
+package com.example.stopwatch.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
 import android.widget.*
+import com.example.stopwatch.R
 import com.example.stopwatch.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
