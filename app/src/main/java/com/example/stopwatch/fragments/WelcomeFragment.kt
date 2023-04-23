@@ -21,21 +21,22 @@ class WelcomeFragment : Fragment() {
         _binding = FragmentWelcomeBinding.inflate(inflater, container, false)
 
         binding.btnStopwatch.setOnClickListener {
-            val stopwatchNickname = getStopwatchNickname()
-            val action = WelcomeFragmentDirections.actionWelcomeFragmentToStopwatchFragment(stopwatchNickname)
-            val navController = findNavController()
-            navController.navigate(action)
+            val etNickname = binding.etNickname.text
+            if(etNickname.isNullOrEmpty()) {
+                Toast.makeText(activity, "give your stopwatch a nickname", Toast.LENGTH_SHORT).show()
+            } else {
+                val stopwatchNickname = etNickname.toString()
+                val action = WelcomeFragmentDirections.actionWelcomeFragmentToStopwatchFragment(stopwatchNickname)
+                val navController = findNavController()
+                navController.navigate(action)
+            }
+
+            etNickname.clear()
         }
+
         return binding.root
     }
 
-    private fun getStopwatchNickname() : String {
-        val etNickname = binding.etNickname.text
-        if(etNickname.isNullOrEmpty()) {
-            Toast.makeText(activity, "give your stopwatch a nickname", Toast.LENGTH_SHORT).show()
-        }
-        return etNickname.toString()
-    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
