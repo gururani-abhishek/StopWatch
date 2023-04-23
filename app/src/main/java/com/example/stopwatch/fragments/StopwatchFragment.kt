@@ -1,20 +1,20 @@
 package com.example.stopwatch.fragments
 
 import android.os.Bundle
-import android.os.SystemClock
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Chronometer
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.stopwatch.databinding.FragmentStopwatchBinding
+import com.example.stopwatch.viewmodels.StopwatchViewModel
 
 class StopwatchFragment : Fragment() {
     private var _binding : FragmentStopwatchBinding ?= null
     private val binding get() = _binding!!
 
-    private var running : Boolean = false
-    private var offset : Long = 0
+    private lateinit var viewModel : StopwatchViewModel
 
     // keys for savedInstanceState bundle
     val OFFSET_KEY = "offsetKey"
@@ -31,97 +31,88 @@ class StopwatchFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        viewModel = ViewModelProvider(this)[StopwatchViewModel::class.java]
+
 
         if(savedInstanceState != null) {
 
-            running = savedInstanceState.getBoolean(RUNNING_KEY)
+            viewModel.running = savedInstanceState.getBoolean(RUNNING_KEY)
 
-            if(running) {
+            if(viewModel.running) {
                 binding.stopwatch.base = savedInstanceState.getLong(BASE_KEY)
                 binding.stopwatch.start()
             } else {
-                offset = savedInstanceState.getLong(OFFSET_KEY)
-                setBaseTime()
+                viewModel.offset = savedInstanceState.getLong(OFFSET_KEY)
+                viewModel.setBaseTime()
             }
         }
+
+        // adding an obsever to stopwatchState
+        viewModel.stopwatchState.observe(viewLifecycleOwner, Observer {liveStopwatchState ->
+            if(liveStopwatchState) {
+                binding.stopwatch.start()
+            } else {
+                binding.stopwatch.stop()
+            }
+        })
+
+        viewModel.baseTime.observe(viewLifecycleOwner, Observer {liveBaseTime ->
+            binding.stopwatch.base = liveBaseTime
+        })
 
         // setting up nickname tv
         binding.tvStopwatchNickname.text = StopwatchFragmentArgs.fromBundle(requireArguments()).stopwatchNickname
 
         // setting up startButton
         binding.startBTN.setOnClickListener {
-            if(!running) {
-                setBaseTime()
-                binding.stopwatch.start()
-                running = true
-            }
+            viewModel.onStartButtonPressed()
         }
 
         // setting up pauseButton
         binding.pauseBTN.setOnClickListener {
-            if(running) {
-                saveOffset()
-                binding.stopwatch.stop()
-                running = false
-            }
+            viewModel.onPauseButtonPressed()
         }
 
         // setting up resetButton
         binding.resetBTN.setOnClickListener {
-            offset = 0
-            setBaseTime()
+            viewModel.onResetButtonPressed()
         }
 
         // setting up stopButton
         binding.stopBTN.setOnClickListener {
-            offset = 0
-            setBaseTime()
-            binding.stopwatch.stop()
-            running = false
+            viewModel.onStopButtonPressed()
         }
-
-        super.onViewCreated(view, savedInstanceState)
     }
 
 
-    // fragment out of focus
+//     fragment out of focus
     override fun onPause() {
         super.onPause()
-        if(running) {
-            saveOffset()
-            binding.stopwatch.stop()
-        }
+        viewModel.onFocussed()
     }
 
-    // running(true) -> pause it in onPause() -> running(true) -> start it in onResume()
-    // running(false) -> do nothing in onPause() -> running(false) -> do nothing in onResume()
-
-    // fragment back in focus
+//     running(true) -> pause it in onPause() -> running(true) -> start it in onResume()
+//     running(false) -> do nothing in onPause() -> running(false) -> do nothing in onResume()
+//
+//     fragment back in focus
     override fun onResume() {
         super.onResume()
-        if(running) {
-            setBaseTime()
-            binding.stopwatch.start()
-        }
+        viewModel.onUnfocused()
     }
 
-    // this is called when the host activity calls its own onSavedInstanceState()
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putLong(BASE_KEY, binding.stopwatch.base)
-        outState.putBoolean(RUNNING_KEY, running)
-        outState.putLong(OFFSET_KEY, offset)
-    }
-    private fun setBaseTime() {
-        binding.stopwatch.base = SystemClock.elapsedRealtime() - offset
-    }
-
-    private fun saveOffset() {
-        offset = SystemClock.elapsedRealtime() - binding.stopwatch.base
+        outState.putBoolean(RUNNING_KEY, viewModel.running)
+        outState.putLong(OFFSET_KEY, viewModel.offset)
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+        super.onDestroyView()
     }
 }

@@ -6,19 +6,39 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.stopwatch.R
 import com.example.stopwatch.databinding.FragmentWelcomeBinding
+import com.example.stopwatch.viewmodels.WelcomeViewModel
 
 class WelcomeFragment : Fragment() {
     private var _binding : FragmentWelcomeBinding ?= null
     private val binding get() = _binding!!
+
+    private lateinit var viewModel : WelcomeViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
         _binding = FragmentWelcomeBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this)[WelcomeViewModel::class.java]
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.nicknameGiven.observe(viewLifecycleOwner, Observer { liveValueNicknameGiven ->
+            if(liveValueNicknameGiven) {
+                val action = WelcomeFragmentDirections.actionWelcomeFragmentToStopwatchFragment(viewModel.fetchNickname())
+                val navController = findNavController()
+                navController.navigate(action)
+            }
+        })
 
         binding.btnStopwatch.setOnClickListener {
             val etNickname = binding.etNickname.text
@@ -26,15 +46,10 @@ class WelcomeFragment : Fragment() {
                 Toast.makeText(activity, "give your stopwatch a nickname", Toast.LENGTH_SHORT).show()
             } else {
                 val stopwatchNickname = etNickname.toString()
-                val action = WelcomeFragmentDirections.actionWelcomeFragmentToStopwatchFragment(stopwatchNickname)
-                val navController = findNavController()
-                navController.navigate(action)
+                viewModel.giveNickname(stopwatchNickname)
             }
-
             etNickname.clear()
         }
-
-        return binding.root
     }
 
     override fun onDestroyView() {
