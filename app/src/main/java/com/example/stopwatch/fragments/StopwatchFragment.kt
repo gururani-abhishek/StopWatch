@@ -36,21 +36,16 @@ class StopwatchFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[StopwatchViewModel::class.java]
 
-
+        // fragment has been recreated,
         if(savedInstanceState != null) {
-
-            viewModel.running = savedInstanceState.getBoolean(RUNNING_KEY)
-
             if(viewModel.running) {
-                binding.stopwatch.base = savedInstanceState.getLong(BASE_KEY)
                 binding.stopwatch.start()
             } else {
-                viewModel.offset = savedInstanceState.getLong(OFFSET_KEY)
                 viewModel.setBaseTime()
             }
         }
 
-        // adding an obsever to stopwatchState
+        // adding an observer to stopwatchState
         viewModel.stopwatchState.observe(viewLifecycleOwner, Observer {liveStopwatchState ->
             if(liveStopwatchState) {
                 binding.stopwatch.start()
@@ -59,6 +54,7 @@ class StopwatchFragment : Fragment() {
             }
         })
 
+        // adding an observer to base time 
         viewModel.baseTime.observe(viewLifecycleOwner, Observer {liveBaseTime ->
             binding.stopwatch.base = liveBaseTime
         })
@@ -91,7 +87,7 @@ class StopwatchFragment : Fragment() {
 //     fragment out of focus
     override fun onPause() {
         super.onPause()
-        viewModel.onFocussed()
+        viewModel.onUnfocused()
     }
 
 //     running(true) -> pause it in onPause() -> running(true) -> start it in onResume()
@@ -100,16 +96,9 @@ class StopwatchFragment : Fragment() {
 //     fragment back in focus
     override fun onResume() {
         super.onResume()
-        viewModel.onUnfocused()
+        viewModel.onFocused()
     }
 
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putLong(BASE_KEY, binding.stopwatch.base)
-        outState.putBoolean(RUNNING_KEY, viewModel.running)
-        outState.putLong(OFFSET_KEY, viewModel.offset)
-    }
 
     override fun onDestroyView() {
         _binding = null

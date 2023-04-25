@@ -52,14 +52,14 @@ class StopwatchViewModel : ViewModel() {
         offset = SystemClock.elapsedRealtime() - (_baseTime.value!!)
     }
 
-    fun onUnfocused() {
+    fun onFocused() {
         if(running) {
             setBaseTime()
             _stopwatchState.value = true
         }
     }
 
-    fun onFocussed() {
+    fun onUnfocused() {
         if(running) {
             saveOffset()
             _stopwatchState.value = false
